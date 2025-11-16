@@ -25,6 +25,7 @@ type User {
   id: ID!
   first_name: String!
   last_name: String!
+  username: String!
   email: String!
   full_name: String @method(name: "getFullName")
   avatar_url: String
