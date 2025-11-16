@@ -35,14 +35,16 @@ class PlugnmeetService
     }
 
 
-    public function getJoinToken()
+    public function getJoinToken(string $roomId, string $userName, string $role = 'participant'): array
     {
+        $isAdmin = $role === 'moderator'; // moderators have admin rights
+
         $body = [
-            "room_id" => "room01",
+            "room_id" => $roomId,
             "user_info" => [
-                "name" => "El-Mohandes",
+                "name" => $userName,
                 "user_id" => uniqid("user_"),
-                "is_admin" => true,
+                "is_admin" => $isAdmin,
                 "is_hidden" => false,
                 "user_metadata" => [
                     "preferred_lang" => "en-US"

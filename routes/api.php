@@ -9,4 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/plugnmeet/create-room', [PlugNmeetController::class, 'create'])->name('plugnmeet.create-room');
-Route::post('/plugnmeet/join-room', [PlugNmeetController::class, 'join'])->name('plugnmeet.join-room');
+Route::post('/join', [PlugNmeetController::class, 'join'])->name('plugnmeet.join-room');

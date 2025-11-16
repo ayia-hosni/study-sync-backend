@@ -12,7 +12,7 @@ class CreatePost
     public function __invoke($_, array $args, GraphQLContext $context): Post
     {
         $user = $context->user() ?? Auth::user();
-        if (! $user) {
+        if (!$user) {
             throw new UnauthorizedHttpException('Bearer', 'Unauthenticated.');
         }
 
@@ -22,9 +22,24 @@ class CreatePost
         $post->author_id  = $user->id;
         $post->room_id    = $input['room_id'] ?? null;
         $post->content    = $input['content'];
-        $post->media_urls = $input['media_urls'] ?? null;
         $post->visibility = $input['visibility'];
         $post->type       = $input['type'];
+
+        // ---------------------------
+        // Handle file uploads
+        // ---------------------------
+        $mediaUrls = [];
+
+        if (!empty($input['media'])) {
+            foreach ($input['media'] as $file) {
+                // $file is an Illuminate\Http\UploadedFile
+                $path = $file->store('posts', 'public');
+                $mediaUrls[] = asset('storage/' . $path);
+            }
+        }
+
+        $post->media_urls = $mediaUrls;
+
         $post->save();
 
         return $post->fresh();

@@ -9,5 +9,6 @@
 #import post/post.queries.graphql
 #import post/post.mutations.graphql
 
+#import comment.graphql
 #import session.graphql
 #import matchmaking.graphql

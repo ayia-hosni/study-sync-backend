@@ -1,51 +1,42 @@
 """
-Input for creating a comment on a post (or a reply to another comment).
+Input for creating a comment or reply on a post.
 """
 input CreatePostCommentInput {
-  post_id: ID!         # the Post being commented on
-  parent_id: ID        # optional: to reply to an existing comment
-  content: String!
-  media_urls: [String!]
+    post_id: ID!
+    parent_id: ID
+    content: String!
+    media_urls: [String!]
 }
 
 type PostComment {
-  id: ID!
-  author_id: ID!
-  post_id: ID!
-  parent_id: ID
-  content: String!
-  media_urls: [String!]
-  created_at: DateTime!
-  updated_at: DateTime!
+    id: ID!
+    commenter_id: ID!
+    post_id: ID!
+    parent_id: ID
+    content: String!
+    media_urls: [String!]
+    created_at: DateTime!
+    updated_at: DateTime!
 
-  author: User @belongsTo
-  post: Post @belongsTo
-  parent: PostComment @belongsTo
-  children: [PostComment!]! @hasMany
+    commenter: User! @belongsTo
+    post: Post! @belongsTo
+    parent: PostComment @belongsTo
+    children: [PostComment!]! @hasMany
 }
 
+type Query {
+    comments(
+        post_id: ID @where(key: "post_id")
+        orderBy: [OrderByClause!] @orderBy
+    ): [PostComment!]! @paginate(type: "PAGINATOR", defaultCount: 10)
+}
+
+
 extend type Mutation {
-  createPostComment(input: CreatePostCommentInput!): PostComment
+    createPostComment(
+        input: CreatePostCommentInput!
+    ): PostComment
     @guard
     @validator(class: "App\\GraphQL\\Validators\\Post\\CreatePostCommentValidator")
     @field(resolver: "App\\GraphQL\\Mutations\\Post\\CreatePostComment")
-}
-
-"""
-Page-based pagination for comments (handy per-post).
-"""
-type PostCommentPaginator {
-  data: [PostComment!]!
-  paginatorInfo: PaginatorInfo!
-}
-
-extend type Query {
-  comments(
-    post_id: ID! @where(key: "post_id")
-    first: Int = 10
-    page: Int
-    orderBy: [OrderByClause!] @orderBy
-  ): PostCommentPaginator
-    @paginate(type: "PAGINATOR", model: "App\\Models\\PostComment")
-    @guard
 }

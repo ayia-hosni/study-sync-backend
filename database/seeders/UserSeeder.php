@@ -16,11 +16,12 @@ class UserSeeder extends Seeder
     {
         User::firstOrCreate(
             [
-                'email' => 'aya@example.com', // only unique identifiers should go here
+                'email' => 'aya@example.com',
             ],
             [
                 'first_name' => 'Aya',
                 'last_name' => 'Test',
+                'username' => 'aya',
                 'password' => Hash::make('secret123'),
             ]
         );

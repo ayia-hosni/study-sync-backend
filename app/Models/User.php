@@ -58,6 +58,10 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function getFullName()
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
     public function studySessions()
     {
         return $this->belongsToMany(StudySession::class, 'study_session_user');

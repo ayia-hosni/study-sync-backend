@@ -7,12 +7,14 @@ Input for creating a Post.
 - visibility must match the PHP enum App\\Enums\\Visibility
 - type is a free-form string like 'text', 'image', 'poll', etc.
 """
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
 input CreatePostInput {
-  room_id: ID
-  content: String!
-  media_urls: [String!]
-  visibility: Visibility!
-  type: String!
+    room_id: ID
+    content: String!
+    media: [Upload!]
+    visibility: Visibility!
+    type: String!
 }
 
 "Allows ordering a list of records."
