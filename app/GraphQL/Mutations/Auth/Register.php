@@ -16,6 +16,7 @@ class Register
                 'first_name' => $args['input']['first_name'],
                 'last_name' => $args['input']['last_name'],
                 'email' => $args['input']['email'],
+                'username' => $args['input']['username'],
                 'password' => bcrypt($args['input']['password']),
             ]);
 

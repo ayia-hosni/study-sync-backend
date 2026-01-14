@@ -33,8 +33,23 @@ class Post extends Model
         return $this->hasMany(PostComment::class);
     }
 
+    public function getMediaUrlsAttribute($value)
+    {
+        $data = json_decode($value, true);
+
+        if (!is_array($data)) {
+            return [];
+        }
+
+        return array_map(fn($item) => $item ?? '', $data);
+    }
+
     public function reactions() {
         return $this->hasMany(PostReaction::class);
+    }
+
+    public function my_reaction() {
+        return $this->hasOne(PostReaction::class)->where('user_id', \Illuminate\Support\Facades\Auth::id());
     }
 }
 
